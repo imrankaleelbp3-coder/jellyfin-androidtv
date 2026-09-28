@@ -27,7 +27,6 @@ import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -85,8 +84,8 @@ fun HeroInfo(item: HeroItem, accent: Color, modifier: Modifier = Modifier, butto
 		modifier = modifier,
 	) { current ->
 		Column(verticalArrangement = Arrangement.spacedBy(14.dp), modifier = Modifier.widthIn(max = 640.dp)) {
-			Text(current.eyebrow.uppercase(), color = accent, fontSize = 13.sp, fontWeight = FontWeight.Bold, letterSpacing = 2.sp)
-			Text(
+			RText(current.eyebrow.uppercase(), color = accent, fontSize = 13.sp, fontWeight = FontWeight.Bold, letterSpacing = 2.sp)
+			RText(
 				current.title,
 				color = RedesignColors.Text,
 				fontFamily = RedesignFonts.Display,
@@ -98,7 +97,7 @@ fun HeroInfo(item: HeroItem, accent: Color, modifier: Modifier = Modifier, butto
 			)
 			Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
 				current.badges.forEach { badge ->
-					Text(
+					RText(
 						badge,
 						color = RedesignColors.TextSecondary,
 						fontSize = 14.sp,
@@ -109,7 +108,7 @@ fun HeroInfo(item: HeroItem, accent: Color, modifier: Modifier = Modifier, butto
 					)
 				}
 			}
-			Text(current.overview, color = RedesignColors.TextSecondary, fontSize = 17.sp, lineHeight = 25.sp, maxLines = 2, overflow = TextOverflow.Ellipsis)
+			RText(current.overview, color = RedesignColors.TextSecondary, fontSize = 17.sp, lineHeight = 25.sp, maxLines = 2, overflow = TextOverflow.Ellipsis)
 			Spacer(Modifier.height(4.dp))
 			buttons()
 		}
@@ -170,7 +169,7 @@ fun CinematicHome(
 				Spacer(Modifier.height(16.dp))
 				RotationDots(items.size, active.intValue, paused = rowFocused)
 				Spacer(Modifier.height(22.dp))
-				Text("Continue watching", color = RedesignColors.Text, fontFamily = RedesignFonts.Display, fontSize = 18.sp, fontWeight = FontWeight.SemiBold)
+				RText("Continue watching", color = RedesignColors.Text, fontFamily = RedesignFonts.Display, fontSize = 18.sp, fontWeight = FontWeight.SemiBold)
 				Spacer(Modifier.height(12.dp))
 				LazyRow(
 					horizontalArrangement = Arrangement.spacedBy(14.dp),
@@ -197,7 +196,7 @@ fun CinematicHome(
 							}
 							if (index == active.intValue && rowFocused) {
 								Spacer(Modifier.height(14.dp))
-								Text(item.cardSubtitle, color = RedesignColors.Text, fontSize = 13.sp, fontWeight = FontWeight.SemiBold)
+								RText(item.cardSubtitle, color = RedesignColors.Text, fontSize = 13.sp, fontWeight = FontWeight.SemiBold)
 							}
 						}
 					}

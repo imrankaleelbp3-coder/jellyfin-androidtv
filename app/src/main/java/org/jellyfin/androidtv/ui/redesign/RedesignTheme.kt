@@ -1,12 +1,18 @@
 package org.jellyfin.androidtv.ui.redesign
 
 import android.provider.Settings
+import androidx.compose.foundation.text.BasicText
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.staticCompositionLocalOf
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 
 /** Colours from the approved canvas. */
@@ -75,3 +81,36 @@ fun rememberMotionLevel(performanceMode: Boolean): MotionLevel {
 
 /** Duration helper: returns 0 when motion is off so every animation snaps. */
 fun MotionLevel.ms(duration: Int): Int = if (this == MotionLevel.Off) 0 else duration
+
+/**
+ * Plain-Foundation text (the app doesn't ship Compose Material 3).
+ * Same parameter names as material3.Text for the ones we use.
+ */
+@Composable
+fun RText(
+	text: String,
+	modifier: Modifier = Modifier,
+	color: Color = RedesignColors.Text,
+	fontSize: TextUnit = TextUnit.Unspecified,
+	fontWeight: FontWeight? = null,
+	fontFamily: FontFamily? = RedesignFonts.Body,
+	letterSpacing: TextUnit = TextUnit.Unspecified,
+	lineHeight: TextUnit = TextUnit.Unspecified,
+	maxLines: Int = Int.MAX_VALUE,
+	overflow: TextOverflow = TextOverflow.Clip,
+) {
+	BasicText(
+		text = text,
+		modifier = modifier,
+		style = TextStyle(
+			color = color,
+			fontSize = fontSize,
+			fontWeight = fontWeight,
+			fontFamily = fontFamily,
+			letterSpacing = letterSpacing,
+			lineHeight = lineHeight,
+		),
+		maxLines = maxLines,
+		overflow = overflow,
+	)
+}

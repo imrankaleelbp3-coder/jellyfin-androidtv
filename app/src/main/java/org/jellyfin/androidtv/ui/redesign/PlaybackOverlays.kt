@@ -11,6 +11,8 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideInVertically
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.Image
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -26,8 +28,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Icon
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -91,7 +91,7 @@ fun SkipSegmentButton(
 			onDismiss()
 		}
 		Column(horizontalAlignment = Alignment.End, verticalArrangement = Arrangement.spacedBy(6.dp)) {
-			Text("Press OK to skip · Back to dismiss", color = RedesignColors.TextSecondary, fontSize = 12.sp)
+			RText("Press OK to skip · Back to dismiss", color = RedesignColors.TextSecondary, fontSize = 12.sp)
 			Box(
 				Modifier
 					.focusRequester(focus)
@@ -102,7 +102,7 @@ fun SkipSegmentButton(
 					.background(RedesignColors.Text)
 					.clickable(onClick = onSkip),
 			) {
-				Text(
+				RText(
 					label,
 					color = RedesignColors.OnLight,
 					fontSize = 17.sp,
@@ -151,7 +151,7 @@ fun UpNextCard(
 		modifier = modifier.onBackKey(onCancel),
 	) {
 		Column(Modifier.width(300.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
-			Text("UP NEXT", color = accent, fontSize = 12.sp, fontWeight = FontWeight.Bold, letterSpacing = 2.sp)
+			RText("UP NEXT", color = accent, fontSize = 12.sp, fontWeight = FontWeight.Bold, letterSpacing = 2.sp)
 			Box(Modifier.fillMaxWidth().height(169.dp).clip(RoundedCornerShape(12.dp))) {
 				thumbnail(Modifier.fillMaxSize())
 				Box(Modifier.fillMaxSize().background(RedesignColors.Ink.copy(alpha = 0.35f)))
@@ -162,11 +162,11 @@ fun UpNextCard(
 						drawCircle(Color.White.copy(alpha = 0.25f), style = stroke)
 						drawArc(Color.White, -90f, 360f * sweep, useCenter = false, style = stroke)
 					}
-					Text("$left", color = RedesignColors.Text, fontSize = 22.sp, fontWeight = FontWeight.Bold)
+					RText("$left", color = RedesignColors.Text, fontSize = 22.sp, fontWeight = FontWeight.Bold)
 				}
 			}
-			Text(info.title, color = RedesignColors.Text, fontFamily = RedesignFonts.Display, fontSize = 17.sp, fontWeight = FontWeight.Bold)
-			Text(info.subtitle, color = RedesignColors.TextSecondary, fontSize = 12.sp)
+			RText(info.title, color = RedesignColors.Text, fontFamily = RedesignFonts.Display, fontSize = 17.sp, fontWeight = FontWeight.Bold)
+			RText(info.subtitle, color = RedesignColors.TextSecondary, fontSize = 12.sp)
 			Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
 				PillButton("Play now", primary = true, onClick = onPlayNow, modifier = Modifier.focusRequester(focus))
 				PillButton("Cancel", primary = false, onClick = onCancel)
@@ -187,7 +187,7 @@ private fun PillButton(text: String, primary: Boolean, onClick: () -> Unit, modi
 			.background(if (primary) RedesignColors.Text else RedesignColors.Glass)
 			.clickable(onClick = onClick),
 	) {
-		Text(
+		RText(
 			text,
 			color = if (primary) RedesignColors.OnLight else RedesignColors.Text,
 			fontSize = 14.sp,
@@ -224,8 +224,8 @@ fun QuickActionsMenu(
 			.padding(7.dp),
 	) {
 		Column(Modifier.padding(horizontal = 9.dp, vertical = 6.dp)) {
-			Text(title, color = RedesignColors.Text, fontSize = 15.sp, fontWeight = FontWeight.Bold)
-			Text(subtitle, color = RedesignColors.TextMuted, fontSize = 11.sp)
+			RText(title, color = RedesignColors.Text, fontSize = 15.sp, fontWeight = FontWeight.Bold)
+			RText(subtitle, color = RedesignColors.TextMuted, fontSize = 11.sp)
 		}
 		actions.forEachIndexed { i, action ->
 			var focused by remember { mutableStateOf(false) }
@@ -242,8 +242,8 @@ fun QuickActionsMenu(
 					.padding(horizontal = 10.dp, vertical = 9.dp),
 			) {
 				val tint = if (focused) RedesignColors.OnLight else RedesignColors.TextSecondary
-				Icon(action.icon, contentDescription = null, tint = tint, modifier = Modifier.size(16.dp))
-				Text(action.label, color = tint, fontSize = 13.sp, fontWeight = FontWeight.SemiBold)
+				Image(imageVector = action.icon, contentDescription = null, colorFilter = ColorFilter.tint(tint), modifier = Modifier.size(16.dp))
+				RText(action.label, color = tint, fontSize = 13.sp, fontWeight = FontWeight.SemiBold)
 			}
 		}
 	}

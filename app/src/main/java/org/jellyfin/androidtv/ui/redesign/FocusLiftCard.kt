@@ -36,7 +36,6 @@ import androidx.compose.ui.input.key.KeyEventType
 import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.onPreviewKeyEvent
 import androidx.compose.ui.input.key.type
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
@@ -80,7 +79,6 @@ fun FocusLiftCard(
 ) {
 	val motion = LocalMotionLevel.current
 	val lastDirection = LocalLastDpadDirection.current
-	val density = LocalDensity.current
 
 	var focused by remember { mutableStateOf(false) }
 	var longPressFired by remember { mutableStateOf(false) }
@@ -128,9 +126,9 @@ fun FocusLiftCard(
 			.graphicsLayer {
 				scaleX = scale
 				scaleY = scale
-				translationY = -with(density) { lift.toPx() }
+				translationY = -lift.toPx()
 				rotationY = tilt.value
-				cameraDistance = 12f * density.density
+				cameraDistance = 12f * density
 			}
 			.shadow(if (focused) 28.dp else 6.dp, shape, clip = false)
 			.border(3.dp, RedesignColors.FocusRing.copy(alpha = ringAlpha), shape)
