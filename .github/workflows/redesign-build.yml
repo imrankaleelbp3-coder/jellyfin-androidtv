@@ -1,0 +1,65 @@
+name: Build redesign APK
+
+on:
+  push:
+    branches: [redesign]
+  workflow_dispatch:
+
+permissions:
+  contents: write   # needed to publish the APK as a release
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      # Same Java version as upstream: read from the repo's .tools-versions file.
+      - uses: actions/setup-java@de7274f081f381c8f8158605e0321c36c376e2e6 # v6.0.1
+        with:
+          distribution: temurin
+          java-version-file: .tools-versions
+
+      - uses: gradle/actions/setup-gradle@9c971963bec38e04b3d30dcc455b5382be2fdbfb # v6.3.0
+
+      # Fixed debug key, so each new APK installs as an update over the last one.
+      # Without this every runner makes a new key and Android refuses the update.
+      - name: Restore debug keystore
+        env:
+          DEBUG_KEYSTORE_B64: ${{ secrets.DEBUG_KEYSTORE_B64 }}
+        run: |
+          mkdir -p ~/.android
+          echo "$DEBUG_KEYSTORE_B64" | base64 -d > ~/.android/debug.keystore
+
+      - name: Build debug APK
+        run: ./gradlew assembleDebug --stacktrace
+
+      - name: Collect APK
+        run: |
+          mkdir -p out
+          find app/build/ -iname "*.apk" -exec mv "{}" out/ \;
+          ls -l out
+          # One APK -> give it a stable name so the download link never changes.
+          if [ "$(ls out/*.apk | wc -l)" -eq 1 ]; then
+            mv out/*.apk out/jellyfin-redesign.apk
+          fi
+
+      # Download from the run page (needs GitHub login).
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: jellyfin-redesign-apk
+          retention-days: 14
+          if-no-files-found: error
+          path: out/
+
+      # Public, stable link for the TV's Downloader app:
+      # https://github.com/<you>/jellyfin-androidtv/releases/download/redesign-latest/jellyfin-redesign.apk
+      - name: Publish "redesign-latest" pre-release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release delete redesign-latest --yes --cleanup-tag || true
+          gh release create redesign-latest out/*.apk \
+            --prerelease \
+            --title "Redesign build ${GITHUB_SHA::7}" \
+            --notes "Built from ${GITHUB_SHA} on branch redesign."
